@@ -253,10 +253,10 @@ class _MessageListViewState extends State<MessageListView> {
                                   },
                                   child: StatefulBuilder(
                                     builder: (context, setState) {
-                                      widget.messages[i].shown = true;
                                       if(widget.onShown != null) {
                                         widget.onShown(widget.messages[i]);
                                       }
+                                      widget.messages[i].shown = true;
                                       return widget.messageBuilder != null
                                           ? widget
                                           .messageBuilder(widget.messages[i])
