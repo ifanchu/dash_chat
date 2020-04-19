@@ -33,6 +33,10 @@ class ChatMessage {
   /// to the user
   QuickReplies quickReplies;
 
+  /// An optional parameter to determine whether this message has been shown
+  /// on the widget.
+  bool shown;
+
   ChatMessage({
     String id,
     @required this.text,
@@ -42,6 +46,7 @@ class ChatMessage {
     this.quickReplies,
     String Function() messageIdGenerator,
     DateTime createdAt,
+    this.shown = false
   }) {
     this.createdAt = createdAt != null ? createdAt : DateTime.now();
     this.id = id != null
@@ -61,6 +66,7 @@ class ChatMessage {
     quickReplies = json['quickReplies'] != null
         ? QuickReplies.fromJson(json['quickReplies'])
         : null;
+    shown = json['shown'] != null ? json['shown'].toString() == 'true':true;
   }
 
   Map<String, dynamic> toJson() {
@@ -74,6 +80,7 @@ class ChatMessage {
       data['createdAt'] = this.createdAt.millisecondsSinceEpoch;
       data['user'] = user.toJson();
       data['quickReplies'] = quickReplies?.toJson();
+      data['shown'] = shown.toString();
     } catch (e, stack) {
       print('ERROR caught when trying to convert ChatMessage to JSON:');
       print(e);

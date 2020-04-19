@@ -9,6 +9,7 @@ class MessageListView extends StatefulWidget {
   final bool showAvatarForEverMessage;
   final Function(ChatUser) onPressAvatar;
   final Function(ChatUser) onLongPressAvatar;
+  final Function(ChatMessage) onShown;
   final bool renderAvatarOnTop;
   final Function(ChatMessage) onLongPressMessage;
   final bool inverted;
@@ -49,6 +50,7 @@ class MessageListView extends StatefulWidget {
     this.showAvatarForEverMessage,
     this.inverted,
     this.onLongPressAvatar,
+    this.onShown,
     this.onLongPressMessage,
     this.onPressAvatar,
     this.renderAvatarOnTop,
@@ -249,24 +251,32 @@ class _MessageListViewState extends State<MessageListView> {
                                               ));
                                     }
                                   },
-                                  child: widget.messageBuilder != null
-                                      ? widget
+                                  child: StatefulBuilder(
+                                    builder: (context, setState) {
+                                      widget.messages[i].shown = true;
+                                      if(widget.onShown != null) {
+                                        widget.onShown(widget.messages[i]);
+                                      }
+                                      return widget.messageBuilder != null
+                                          ? widget
                                           .messageBuilder(widget.messages[i])
-                                      : MessageContainer(
-                                          isUser: widget.messages[i].user.uid ==
-                                              widget.user.uid,
-                                          message: widget.messages[i],
-                                          timeFormat: widget.timeFormat,
-                                          messageImageBuilder:
-                                              widget.messageImageBuilder,
-                                          messageTextBuilder:
-                                              widget.messageTextBuilder,
-                                          messageTimeBuilder:
-                                              widget.messageTimeBuilder,
-                                          messageContainerDecoration:
-                                              widget.messageContainerDecoration,
-                                          parsePatterns: widget.parsePatterns,
-                                        ),
+                                          : MessageContainer(
+                                        isUser: widget.messages[i].user.uid ==
+                                            widget.user.uid,
+                                        message: widget.messages[i],
+                                        timeFormat: widget.timeFormat,
+                                        messageImageBuilder:
+                                        widget.messageImageBuilder,
+                                        messageTextBuilder:
+                                        widget.messageTextBuilder,
+                                        messageTimeBuilder:
+                                        widget.messageTimeBuilder,
+                                        messageContainerDecoration:
+                                        widget.messageContainerDecoration,
+                                        parsePatterns: widget.parsePatterns,
+                                      );
+                                    },
+                                  )
                                 ),
                                 if (widget.showuserAvatar)
                                   Padding(
