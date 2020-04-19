@@ -225,6 +225,9 @@ class DashChat extends StatefulWidget {
   /// by default it padding is set 0.0
   final EdgeInsets inputToolbarMargin;
 
+  /// Callback when the [ChatMessage] is shown on widget
+  final Function(ChatMessage) onShown;
+
   DashChat({
     Key key,
     this.inputTextDirection = TextDirection.ltr,
@@ -288,6 +291,7 @@ class DashChat extends StatefulWidget {
     this.messageTextBuilder,
     this.messageTimeBuilder,
     this.showTraillingBeforeSend = true,
+    this.onShown,
   }) : super(key: key);
 
   String getVal() {
@@ -451,6 +455,7 @@ class DashChatState extends State<DashChat> {
             changeVisible: changeVisible,
             visible: visible,
             showLoadMore: showLoadMore,
+            onShown: widget.onShown,
           ),
           if (widget.messages.length != 0 &&
               widget.messages[widget.messages.length - 1].user.uid !=
